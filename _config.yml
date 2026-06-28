@@ -1,7 +1,10 @@
 title: Infinity Release Notes
 description: Product release notes for the Infinity investment platform.
-baseurl: "/infinity-releases"
-url: "https://tcnos.github.io"
+# Served from a custom domain (CNAME: releases.invos.in) at the root path,
+# so baseurl MUST be empty — a non-empty baseurl makes relative_url links
+# (internal release pages, back links) 404 on the custom domain.
+baseurl: ""
+url: "https://releases.invos.in"
 
 # Each file in _releases becomes its own page at /releases/<tag>/
 collections:

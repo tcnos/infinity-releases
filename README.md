@@ -1,7 +1,7 @@
 # Infinity Release Notes
 
 Public, auto-generated release notes for the Infinity platform, served via GitHub
-Pages at **https://tcnos.github.io/infinity-releases/**.
+Pages at **https://releases.invos.in/**.
 
 ## How it works
 
