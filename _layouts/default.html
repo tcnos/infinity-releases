@@ -60,9 +60,16 @@
 </head>
 <body>
   <header class="site">
-    <div class="wrap">
-      <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
-      <p>{{ site.description }}</p>
+    <div class="wrap" style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px;">
+      <div>
+        <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+        <p>{{ site.description }}</p>
+      </div>
+      <a href="{{ '/report/' | relative_url }}"
+         style="flex-shrink:0; margin-top:2px; font-size:13px; font-weight:600; color:var(--accent);
+                border:1px solid #c7d2fe; background:var(--accent-soft); border-radius:8px; padding:6px 12px;">
+        Report a bug
+      </a>
     </div>
   </header>
   <main>

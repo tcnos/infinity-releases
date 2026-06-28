@@ -1,0 +1,12 @@
+name = "infinity-bug-reporter"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+
+# Public, non-secret config. Override per environment if needed.
+[vars]
+ALLOW_ORIGIN = "https://tcnos.github.io"
+TARGET_REPO  = "tcnos/infinity-releases"
+
+# Secrets are NOT stored here. Set them after first deploy:
+#   wrangler secret put GITHUB_TOKEN       # fine-grained PAT, Issues: Read & write on TARGET_REPO
+#   wrangler secret put TURNSTILE_SECRET   # Cloudflare Turnstile secret key
