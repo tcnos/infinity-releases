@@ -8,7 +8,7 @@ title: Releases
 {% assign rels = site.releases | sort: 'date' | reverse %}
 {% for r in rels %}
   <li>
-    <span class="date">{{ r.date }}</span>
+    <span class="date">{{ r.date | date: "%b %-d, %Y" }}</span>
     <a href="{{ r.url | relative_url }}">
       <span class="ver">{{ r.version }}</span>
     </a>{% if r.prerelease %}<span class="badge">pre-release</span>{% endif %}

@@ -7,7 +7,7 @@ layout: default
 </h1>
 <p class="rel-meta">
   {% if page.title and page.title != page.version %}{{ page.title }} · {% endif %}
-  Released {{ page.date }}
+  Released {{ page.date | date: "%b %-d, %Y" }}
   {% if page.source_url %} · <a href="{{ page.source_url }}">View on GitHub</a>{% endif %}
 </p>
 <hr>
