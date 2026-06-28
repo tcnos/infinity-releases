@@ -33,6 +33,23 @@ function safeSlug(tag) {
   return String(tag).trim().replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+// Releases below this version are NOT published to the public site — everything
+// before it is folded into the hand-authored "Initial Release" page
+// (_releases/initial.md). The raw GitHub Releases still exist; this only controls
+// what the site renders, and stops a backfill from resurrecting old notes.
+const MIN_TAG = process.env.MIN_RELEASE_TAG || 'v0.9.0';
+
+function parseVer(tag) {
+  const m = String(tag).trim().replace(/^v/i, '').match(/^(\d+)\.(\d+)\.(\d+)/);
+  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
+}
+function ltMinTag(tag) {
+  const a = parseVer(tag), b = parseVer(MIN_TAG);
+  if (!a || !b) return false; // unparseable tag → don't filter it out
+  for (let i = 0; i < 3; i++) if (a[i] !== b[i]) return a[i] < b[i];
+  return false;
+}
+
 // YAML-safe double-quoted scalar via JSON.stringify (escapes quotes/backslashes).
 const y = s => JSON.stringify(String(s ?? ''));
 
@@ -42,6 +59,10 @@ function renderOne(rel) {
     return null;
   }
   const tag   = rel.tag_name || rel.name || 'untagged';
+  if (ltMinTag(tag)) {
+    console.error(`render_release: skipping ${tag} (< ${MIN_TAG}; folded into Initial Release)`);
+    return null;
+  }
   const slug  = safeSlug(tag);
   const title = rel.name || tag;
   const date  = (rel.published_at || rel.created_at || '').slice(0, 10);
