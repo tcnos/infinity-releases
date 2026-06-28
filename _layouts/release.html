@@ -1,0 +1,14 @@
+---
+layout: default
+---
+<a class="back" href="{{ '/' | relative_url }}">← All releases</a>
+<h1 style="margin:0 0 4px; letter-spacing:-0.02em;">
+  {{ page.version }}{% if page.prerelease %}<span class="badge">pre-release</span>{% endif %}
+</h1>
+<p class="rel-meta">
+  {% if page.title and page.title != page.version %}{{ page.title }} · {% endif %}
+  Released {{ page.date }}
+  {% if page.source_url %} · <a href="{{ page.source_url }}">View on GitHub</a>{% endif %}
+</p>
+<hr>
+{{ content }}

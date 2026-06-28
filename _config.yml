@@ -1,0 +1,28 @@
+title: Infinity Release Notes
+description: Product release notes for the Infinity investment platform.
+baseurl: "/infinity-releases"
+url: "https://tcnos.github.io"
+
+# Each file in _releases becomes its own page at /releases/<tag>/
+collections:
+  releases:
+    output: true
+    permalink: /releases/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: releases
+    values:
+      layout: release
+
+# GitHub Pages builds in safe mode; no custom plugins are used here.
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+exclude:
+  - README.md
+  - scripts/
+  - Gemfile
+  - Gemfile.lock
