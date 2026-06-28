@@ -53,6 +53,36 @@ function ltMinTag(tag) {
 // YAML-safe double-quoted scalar via JSON.stringify (escapes quotes/backslashes).
 const y = s => JSON.stringify(String(s ?? ''));
 
+// "Deployment notes" is internal ops content (migration commands, infra steps)
+// and must NOT appear on the public site. Strip any heading whose text is
+// "Deployment notes" and everything under it, up to the next heading of the
+// same-or-higher level (or end of doc). Fence-aware so a `#`-comment inside a
+// ``` code block is never mistaken for a markdown heading.
+const DROP_HEADING = /^deployment notes\b/i;
+function stripDropSections(md) {
+  const lines = md.split('\n');
+  const out = [];
+  let skipping = false, skipLevel = 0, inFence = false, fence = '';
+  for (const line of lines) {
+    const f = line.match(/^\s*(```+|~~~+)/);
+    if (f) {
+      const marker = f[1][0];
+      if (!inFence) { inFence = true; fence = marker; }
+      else if (fence === marker) { inFence = false; }
+    }
+    if (!inFence) {
+      const h = line.match(/^(#{1,6})\s+(\S.*?)\s*$/);
+      if (h) {
+        const level = h[1].length;
+        if (skipping && level <= skipLevel) skipping = false;
+        if (!skipping && DROP_HEADING.test(h[2])) { skipping = true; skipLevel = level; continue; }
+      }
+    }
+    if (!skipping) out.push(line);
+  }
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd();
+}
+
 function renderOne(rel) {
   if (rel.draft) {
     console.error(`render_release: skipping draft ${rel.tag_name || '(no tag)'}`);
@@ -66,7 +96,7 @@ function renderOne(rel) {
   const slug  = safeSlug(tag);
   const title = rel.name || tag;
   const date  = (rel.published_at || rel.created_at || '').slice(0, 10);
-  const body  = (rel.body || '').replace(/\r\n/g, '\n').trimEnd();
+  const body  = stripDropSections((rel.body || '').replace(/\r\n/g, '\n')).trimEnd();
   const url   = rel.html_url || '';
 
   // {% raw %} guards the release body from Liquid so braces in code blocks
